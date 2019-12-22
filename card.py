@@ -2,6 +2,7 @@ import enum
 from typing import (
     Iterable,
 )
+import random
 
 
 class Card(enum.IntEnum):
@@ -34,3 +35,27 @@ def sum_point(cards: Iterable[Card]) -> int:
         else:
             points += card
     return points
+
+
+class Player:
+    def __init__(self):
+        self.is_stand = False
+        self.cards = random.choices(list(Card), k=2)
+
+    def hit(self):
+        if self.is_stand:
+            return
+        self.cards.append(random.choice(list(Card)))
+
+    def stand(self):
+        self.is_stand = True
+
+
+class Judge:
+    def __init__(self, player, dealer):
+        self.player = player
+        self.dealer = dealer
+    
+    def tell_loser(self):
+        if sum_point(self.player.cards) > 21:
+            return self.player
